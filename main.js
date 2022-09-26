@@ -11,6 +11,8 @@ let mesTurno = 0
 let respuestaConsulta = ""
 let hora = 0
 let duracion = 0
+let creditCard = ""
+const ALIAS = "jardin-club"
 const PRECIOHORA = 2000
 const PRECIOHORAPROMO = 1000
 const PRECIOHORALUZ = 2300
@@ -21,6 +23,7 @@ const precio = dur => Number.parseFloat(dur * PRECIOHORA).toFixed(2)
 const precioConLuz = dur => Number.parseFloat(dur * PRECIOHORALUZ).toFixed(2)
 const precioPromo = dur => Number.parseFloat(dur * PRECIOHORAPROMO).toFixed(2)
 const horaFinTurno = dur => dur + hora
+const sign = monto => Number.parseFloat(monto * 0.4).toFixed(2)
 
 function validUsser(u, p) {
     if ((u === usser) && (p === pass)) {
@@ -190,6 +193,7 @@ function validLoggin() {
         return false
     }
 }
+
 function entryTurnData() {
     do {
         mesTurno = validEntryTurn("el mes (1-12)")
@@ -266,25 +270,72 @@ function loggin() {
             break;
     }
 }
+
+function confirmTurn() {
+    return confirm(usserInSession() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n Seña para reservar el turno: $" + sign(precioFinal()) + "\n¿Deseas confirmarlo?")
+}
+
+function signPay() {
+    let opt = Number(prompt("Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia"))
+    let pay = false
+    do {
+
+        if (!validOption(opt)) {
+            alert("Debes ingresar una opción válida")
+        } else if (opt == 0) {
+            alert("Inicio cancelado - No ha ingresado opción")
+            break
+        }
+    } while (!validOption(opt));
+    do {
+        
+        switch (opt) {
+            case 1:
+                creditCard = prompt("Ingrese el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
+                pay = true
+                break
+            case 2:
+                return confirm("Realice la transferencia al siguiente alias: " + ALIAS + "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
+                pay = true
+                break
+            default:
+                pay = false
+                break
+        }
+    } while (!pay)
+}
+
+function messageConfirmTurn(dia, mes, h, d) {
+    return alert("Turno confirmado para el " + dia + "/" + mes + " desde las " + h + " hs., hasta las " + convertHora(horaFinTurno(d)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
+}
+
+function messageTurnNotAvailable(dia, mes, h) {
+    return alert(usserInSession() + ", el turno que solicitaste no se encuentra disponible para el " + dia + "/" + mes + " a las " + h + "hs.")
+}
 // fin de funciones
 
 // inicio de llamadas
 
-
 loggin()
+do {
+    if (validLoggin()) {
+        let dispo = false
+        do {
+            entryTurnData()
+            if (disponible()) {
+                dispo = true
+                if (confirmTurn()) {
+                    signPay()
+                    messageConfirmTurn(diaTurno, mesTurno, hora, duracion)
+                } else {
+                    alert("Turno no confirmado.")
+                }
+            } else {
+                messageTurnNotAvailable(diaTurno, mesTurno, duracion)
+            }
+        } while (!dispo);
 
-if (validLoggin()) {
-    entryTurnData()
-    if (disponible()) {
-        let confirmTurn = confirm(usserInSession() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n¿Deseas confirmarlo?")
-        if (confirmTurn) {
-            alert("Turno confirmado para el " + diaTurno + "/" + mesTurno + " desde las " + hora + " hs., hasta las " + convertHora(horaFinTurno(duracion)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
-        } else {
-            alert("Turno no convirmado.")
-        }
     } else {
-        alert(usserInSession() + ", el turno que solicitaste no se encuentra disponible para el " + diaTurno + "/" + mesTurno + " a las " + hora + "hs.")
+        alert("Datos incorrectos para iniciar la consulta. Intente nuevamente")
     }
-} else {
-    alert("Datos incorrectos para iniciar la consulta. Intente nuevamente")
-}
+} while (!validLoggin);
