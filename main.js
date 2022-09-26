@@ -138,7 +138,7 @@ function validOption(p) {
 function menu() {
     alert("Bienvenido a Jardín Padel Club!\nEn esta sección podrás solicitar y reservar un turno.")
     do {
-        // alert("Opciones de ingreso: \n" + menuIni)
+        
         optIni = Number(prompt("Opciones de ingreso: \n" + menuIni + "\nIngresa el número correspondiente a la opción deseada:"))
         if (!validOption(optIni)) {
             alert("Debes ingresar una opción válida")
