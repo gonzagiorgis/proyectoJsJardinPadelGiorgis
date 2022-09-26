@@ -277,36 +277,38 @@ function confirmTurn() {
 
 function signPay() {
     let opt = Number(prompt("Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia"))
-    let pay = false
+    // let pay = false
     do {
 
         if (!validOption(opt)) {
             alert("Debes ingresar una opción válida")
         } else if (opt == 0) {
-            alert("Inicio cancelado - No ha ingresado opción")
+            alert("Cancelado el pago de la seña - No ha ingresado datos.")
             break
         }
     } while (!validOption(opt));
-    do {
-        
-        switch (opt) {
-            case 1:
-                creditCard = prompt("Ingrese el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
-                pay = true
-                break
-            case 2:
-                return confirm("Realice la transferencia al siguiente alias: " + ALIAS + "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
-                pay = true
-                break
-            default:
-                pay = false
-                break
-        }
-    } while (!pay)
+    // do {
+    switch (opt) {
+        case 1:
+            creditCard = prompt("Ingrese el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
+            // pay = true
+            return true
+            break
+        case 2:
+            // pay = true
+            alert("Realice la transferencia al siguiente alias: " + ALIAS + "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
+            return true
+            break
+        default:
+            // pay = false
+            return false
+            break
+    }
+    // } while (!pay)
 }
 
 function messageConfirmTurn(dia, mes, h, d) {
-    return alert("Turno confirmado para el " + dia + "/" + mes + " desde las " + h + " hs., hasta las " + convertHora(horaFinTurno(d)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
+    return alert(usserInSession() + "confirmamos tu turno para el " + dia + "/" + mes + " desde las " + h + " hs., hasta las " + convertHora(horaFinTurno(d)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
 }
 
 function messageTurnNotAvailable(dia, mes, h) {
@@ -325,8 +327,11 @@ do {
             if (disponible()) {
                 dispo = true
                 if (confirmTurn()) {
-                    signPay()
-                    messageConfirmTurn(diaTurno, mesTurno, hora, duracion)
+                    if (signPay()) {
+                        messageConfirmTurn(diaTurno, mesTurno, hora, duracion)
+                    } else {
+                        alert("Turno no confirmado, debe abonar la seña.")
+                    }
                 } else {
                     alert("Turno no confirmado.")
                 }
