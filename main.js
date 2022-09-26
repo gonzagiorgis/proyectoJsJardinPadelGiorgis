@@ -175,8 +175,8 @@ function pronostico() {
 }
 
 function disponible() {
-    let a = Math.random() * 1.5
-    if (a > 1) {
+    let a = Math.random()
+    if (a > 0.5) {
         return true
     } else {
         return false
@@ -278,7 +278,7 @@ if (validLoggin()) {
     if (disponible()) {
         let confirmTurn = confirm(usserInSession() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n¿Deseas confirmarlo?")
         if (confirmTurn) {
-            alert("Turno confirmado para el " + diaTurno + "/" + mesTurno + " desde las " + hora + " hs., hasta las " + convertHora(horaFinTurno(duracion)) + " hs.\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
+            alert("Turno confirmado para el " + diaTurno + "/" + mesTurno + " desde las " + hora + " hs., hasta las " + convertHora(horaFinTurno(duracion)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
         } else {
             alert("Turno no convirmado.")
         }
