@@ -16,6 +16,11 @@ const PRECIOHORAPROMO = 1000
 const PRECIOHORALUZ = 2300
 
 // inicio de funciones
+
+const precio = dur => Number.parseFloat(dur * PRECIOHORA).toFixed(2)
+const precioConLuz = dur => Number.parseFloat(dur * PRECIOHORALUZ).toFixed(2)
+const precioPromo = dur => Number.parseFloat(dur * PRECIOHORAPROMO).toFixed(2)
+
 function validUsser(u, p) {
     if ((u === usser) && (p === pass)) {
         return true
@@ -168,7 +173,7 @@ function pronostico() {
     }
 }
 
-function disponible(d, m, h, d) {
+function disponible() {
     let a = Math.random() * 1.5
     if (a > 1) {
         return true
@@ -223,12 +228,19 @@ function entryTurnData() {
     } while (isNaN(duracion) || duracion < 1 || duracion > 4)
 }
 
-const precio = dur => Number.parseFloat(dur * PRECIOHORA).toFixed(2)
+function precioFinal() {
+    if (hora < 17) {
+        return precioPromo(duracion)
+    } else if (hora > 19) {
+        return precioConLuz(duracion)
+    } else {
+        return precio(duracion)
+    }
+}
 
 // fin de funciones
 
 // inicio de llamadas
-
 
 switch (menu()) {
     case 1:
@@ -253,12 +265,17 @@ switch (menu()) {
 if (validLoggin()) {
     entryTurnData()
     if (disponible) {
-        if (confirm(usserInSession() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precio(duracion) + "\n¿Deseas confirmarlo?")) {
-            alert("Turno confirmado para el " + diaTurno + "/" + mesTurno + " a las " + hora + ", de " + duracion + " hs. de duración.\nTen en cuenta que el valor de la hora con uso de la luz de la cancha asciende a $" + PRECIOHORALUZ)
+        let confirmTurn = confirm(usserInSession() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n¿Deseas confirmarlo?")
+        if (confirmTurn) {
+            alert("Turno confirmado para el " + diaTurno + "/" + mesTurno + " a las " + hora + "hs., de " + duracion + " hs. de duración.\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.")
+        } else {
+            alert("Turno no convirmado.")
         }
     } else {
         alert(usserInSession() + ", el turno que solicitaste no se encuentra disponible para el " + dia + "/" + mes + " a las " + hora + "hs.")
     }
+}else{
+    alert("Datos incorrectos para iniciar la consulta. Intente nuevamente")
 }
 
 
