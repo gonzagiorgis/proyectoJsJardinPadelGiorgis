@@ -20,6 +20,7 @@ const PRECIOHORALUZ = 2300
 const precio = dur => Number.parseFloat(dur * PRECIOHORA).toFixed(2)
 const precioConLuz = dur => Number.parseFloat(dur * PRECIOHORALUZ).toFixed(2)
 const precioPromo = dur => Number.parseFloat(dur * PRECIOHORAPROMO).toFixed(2)
+const horaFinTurno = dur => dur + hora
 
 function validUsser(u, p) {
     if ((u === usser) && (p === pass)) {
@@ -165,7 +166,7 @@ function pronostico() {
             return "nublado"
             break
         case 3:
-            return "probabilidad de lluvia"
+            return "probabilidad de lluvia, es solo un pronóstico ;)"
             break
         default:
             return "soleado"
@@ -200,16 +201,16 @@ function entryTurnData() {
     do {
         diaTurno = validEntryTurn("el día (1 a 31)")
         if (isNaN(diaTurno) || diaTurno < 1 || diaTurno > 31) {
-            alert("Mes ingresado inválido, ingresar nuevamente.")
+            alert("Día ingresado inválido, ingresar nuevamente.")
         } else {
             break
         }
     } while (isNaN(diaTurno) || diaTurno < 1 || diaTurno > 31)
 
     do {
-        hora = validEntryTurn("la hora (8 a 23)")
+        hora = Number(validEntryTurn("la hora (8 a 23)"))
         if (isNaN(hora) || hora < 8 || hora > 23) {
-            alert("Mes ingresado inválido, ingresar nuevamente.")
+            alert("Hora ingresada inválida, ingresar nuevamente.")
         } else {
             break
         }
@@ -218,9 +219,9 @@ function entryTurnData() {
 
 
     do {
-        duracion = validEntryTurn("la duración (Eje.: 1.5 = hora y media)")
+        duracion = Number(validEntryTurn("la duración (Eje.: 1.5 = hora y media)"))
         if (isNaN(duracion) || duracion < 1 || duracion > 4) {
-            alert("Mes ingresado inválido, ingresar nuevamente.")
+            alert("Duración ingresada inválida, ingresar nuevamente.")
         } else {
             break
         }
@@ -236,6 +237,12 @@ function precioFinal() {
     } else {
         return precio(duracion)
     }
+}
+
+function convertHora(h) {
+    let hora = parseInt(h)
+    let minutos = parseInt(60 * (h - hora))
+    return hora + ":" + minutos + "hs."
 }
 
 // fin de funciones
@@ -261,27 +268,18 @@ switch (menu()) {
     default:
         break;
 }
-
 if (validLoggin()) {
     entryTurnData()
     if (disponible) {
         let confirmTurn = confirm(usserInSession() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n¿Deseas confirmarlo?")
         if (confirmTurn) {
-            alert("Turno confirmado para el " + diaTurno + "/" + mesTurno + " a las " + hora + "hs., de " + duracion + " hs. de duración.\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.")
+            alert("Turno confirmado para el " + diaTurno + "/" + mesTurno + " desde las " + hora + " hs., hasta las " + convertHora(horaFinTurno(duracion)) + " hs.\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
         } else {
             alert("Turno no convirmado.")
         }
     } else {
         alert(usserInSession() + ", el turno que solicitaste no se encuentra disponible para el " + dia + "/" + mes + " a las " + hora + "hs.")
     }
-}else{
+} else {
     alert("Datos incorrectos para iniciar la consulta. Intente nuevamente")
 }
-
-
-
-
-
-
-
-
