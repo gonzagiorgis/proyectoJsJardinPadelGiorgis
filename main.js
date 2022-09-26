@@ -138,8 +138,8 @@ function validOption(p) {
 function menu() {
     alert("Bienvenido a Jardín Padel Club!\nEn esta sección podrás solicitar y reservar un turno.")
     do {
-        alert("Opciones de ingreso: \n" + menuIni)
-        optIni = Number(prompt("Ingresa el número correspondiente a la opción deseada:"))
+        // alert("Opciones de ingreso: \n" + menuIni)
+        optIni = Number(prompt("Opciones de ingreso: \n" + menuIni + "\nIngresa el número correspondiente a la opción deseada:"))
         if (!validOption(optIni)) {
             alert("Debes ingresar una opción válida")
         } else if (optIni == 0) {
@@ -264,7 +264,7 @@ function loggin() {
             break;
 
         case 4:
-            alert("¡Vuelve pronto!")
+            alert("¡Vuelve pronto, " + usserInSession + "!")
             break;
         default:
             break;
@@ -290,13 +290,13 @@ function signPay() {
     // do {
     switch (opt) {
         case 1:
-            creditCard = prompt("Ingrese el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
+            creditCard = prompt("Ingresa el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
             // pay = true
             return true
             break
         case 2:
             // pay = true
-            alert("Realice la transferencia al siguiente alias: " + ALIAS + "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
+            alert(usserInSession +" realiza la transferencia al siguiente alias: " + ALIAS + "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
             return true
             break
         default:
@@ -308,7 +308,7 @@ function signPay() {
 }
 
 function messageConfirmTurn(dia, mes, h, d) {
-    return alert(usserInSession() + "confirmamos tu turno para el " + dia + "/" + mes + " desde las " + h + " hs., hasta las " + convertHora(horaFinTurno(d)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
+    return alert(usserInSession() + " confirmamos tu turno para el " + dia + "/" + mes + " desde las " + h + " hs., hasta las " + convertHora(horaFinTurno(d)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
 }
 
 function messageTurnNotAvailable(dia, mes, h) {
