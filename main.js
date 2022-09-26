@@ -245,32 +245,37 @@ function convertHora(h) {
     return hora + ":" + minutos + "hs."
 }
 
+function loggin() {
+    switch (menu()) {
+        case 1:
+            invitado()
+            break;
+
+        case 2:
+            usserLoggin()
+            break;
+
+        case 3:
+            usserRegist()
+            break;
+
+        case 4:
+            alert("¡Vuelve pronto!")
+            break;
+        default:
+            break;
+    }
+}
 // fin de funciones
 
 // inicio de llamadas
 
-switch (menu()) {
-    case 1:
-        invitado()
-        break;
 
-    case 2:
-        usserLoggin()
-        break;
+loggin()
 
-    case 3:
-        usserRegist()
-        break;
-
-    case 4:
-        alert("¡Vuelve pronto!")
-        break;
-    default:
-        break;
-}
 if (validLoggin()) {
     entryTurnData()
-    if (disponible) {
+    if (disponible()) {
         let confirmTurn = confirm(usserInSession() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n¿Deseas confirmarlo?")
         if (confirmTurn) {
             alert("Turno confirmado para el " + diaTurno + "/" + mesTurno + " desde las " + hora + " hs., hasta las " + convertHora(horaFinTurno(duracion)) + " hs.\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
@@ -278,7 +283,7 @@ if (validLoggin()) {
             alert("Turno no convirmado.")
         }
     } else {
-        alert(usserInSession() + ", el turno que solicitaste no se encuentra disponible para el " + dia + "/" + mes + " a las " + hora + "hs.")
+        alert(usserInSession() + ", el turno que solicitaste no se encuentra disponible para el " + diaTurno + "/" + mesTurno + " a las " + hora + "hs.")
     }
 } else {
     alert("Datos incorrectos para iniciar la consulta. Intente nuevamente")
