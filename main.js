@@ -1,4 +1,4 @@
-let menuInicio = "1 - Invitado\n2 - Ingresar como usuario\n3 - Registrase\n4 - Salir"
+let listaMenuInicio = "1 - Invitado\n2 - Ingresar como usuario\n3 - Registrase\n4 - Salir"
 let nombreInvitado = ""
 let telefono = ""
 let nombreUsuario = "Jardin"
@@ -19,6 +19,21 @@ const PRECIOHORAPROMO = 1000
 const PRECIOHORALUZ = 2300
 
 // inicio de funciones
+
+const salida = () => opcionInicio === "4"
+class Turno {
+    constructor(fecha, hora, duracion) {
+        this.fecha = fecha
+        this.hora = hora
+        this.duracion = duracion
+    }
+
+    precio = duracion => Number.parseFloat(duracion * PRECIOHORA).toFixed(2)
+    precioConLuz = duracion => Number.parseFloat(duracion * PRECIOHORALUZ).toFixed(2)
+    precioPromo = duracion => Number.parseFloat(duracion * PRECIOHORAPROMO).toFixed(2)
+    horaFinTurno = duracion => duracion + hora
+    reserva = monto => Number.parseFloat(monto * 0.4).toFixed(2)
+}
 
 const precio = duracion => Number.parseFloat(duracion * PRECIOHORA).toFixed(2)
 const precioConLuz = duracion => Number.parseFloat(duracion * PRECIOHORALUZ).toFixed(2)
@@ -118,11 +133,11 @@ function registroUsuario() {
     }
 }
 
-function opcionValida(opcion) {
+function opcionValidaMenuInicio(opcion) {
     if (isNaN(opcion)) {
         return false
     } else {
-        if (opcion < 0 || opcion > 4) {
+        if (opcion <= 0 || opcion >= 5) {
             return false
         } else {
             return true
@@ -130,19 +145,52 @@ function opcionValida(opcion) {
     }
 }
 
-function menu() {
+function opcionValidaPago(opcion) {
+    if (isNaN(opcion)) {
+        return false
+    } else {
+        if (opcion <= 0 || opcion >= 3) {
+            return false
+        } else {
+            return true
+        }
+    }
+}
+
+function menuInicio() {
     alert("Bienvenido a Jardín Padel Club!\nEn esta sección podrás solicitar y reservar un turno.")
     do {
-        opcionInicio = Number(prompt("Opciones de ingreso: \n" + menuInicio + "\nIngresa el número correspondiente a la opción deseada:"))
-        if (!opcionValida(opcionInicio)) {
-            alert("Debes ingresar una opción válida")
-        } else if (opcionInicio == 0) {
+        opcionInicio = prompt("Opciones de ingreso: \n" + listaMenuInicio + "\nIngresa el número correspondiente a la opción deseada:")
+        if (opcionInicio === null) {
             alert("Inicio cancelado - No ha ingresado opción")
             break
+        } else if (!opcionValidaMenuInicio(opcionInicio)) {
+            alert("Debes ingresar una opción válida")
         }
-    } while (!opcionValida(opcionInicio));
-    return opcionInicio
+    } while (!opcionValidaMenuInicio(opcionInicio));
+
+    switch (opcionInicio) {
+        case "1":
+            invitado()
+            break;
+
+        case "2":
+            inicioDeSesion()
+            break;
+
+        case "3":
+            registroUsuario()
+            break;
+        case "4":
+            alert("¡Vuelve pronto!")
+            break;
+        default:
+            break;
+    }
+
 }
+
+
 
 function invitadoEnSesion() {
     if (invitadoCorrecto) {
@@ -242,92 +290,68 @@ function convertirFloatAHora(h) {
     return hora + ":" + minutos + "hs."
 }
 
-function inicio() {
-    switch (menu()) {
-        case 1:
-            invitado()
-            break;
-
-        case 2:
-            inicioDeSesion()
-            break;
-
-        case 3:
-            registroUsuario()
-            break;
-        case 4:
-            alert("¡Vuelve pronto, " + invitadoEnSesion + "!")
-            break;
-        default:
-            break;
-    }
-}
-
-function confirmTurn() {
+function confirmacionTurno() {
     return confirm(invitadoEnSesion() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n Seña para reservar el turno: $" + reserva(precioFinal()) + "\n¿Deseas confirmarlo?")
 }
 
 function pagoReserva() {
-    let opcionPago = Number(prompt("Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia"))
-    // let pay = false
+    let opcionPago = prompt("Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia")
     do {
-
-        if (!opcionValida(opcionPago)) {
-            alert("Debes ingresar una opción válida")
-        } else if (opcionPago == 0) {
-            alert("Cancelado el pago de la seña - No ha ingresado datos.")
+        if (opcionPago === null) {
+            alert("Pago de la seña cancelado.")
             break
+        } else if (!opcionValidaPago(opcionPago)) {
+            alert("Debes ingresar una opción válida")
+            opcionPago = prompt("Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia")
         }
-    } while (!opcionValida(opcionPago));
-    // do {
+    } while (!opcionValidaPago(opcionPago));
+
+
     switch (opcionPago) {
-        case 1:
+        case "1":
             tarjetaCredito = prompt("Ingresa el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
             return true
             break
-        case 2:
+        case "2":
             alert(invitadoEnSesion() + " realiza la transferencia al siguiente alias: " + ALIAS + "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
             return true
             break
         default:
+            console.log(opcionPago)
+            console.log(opcionValidaMenuInicio(opcionPago))
             return false
             break
     }
-    // } while (!pay)
+
 }
 
-function messageConfirmTurn(dia, mes, hora, duracion) {
+function mensajeConfirmacionTurno(dia, mes, hora, duracion) {
     return alert(invitadoEnSesion() + " confirmamos tu turno para el " + dia + "/" + mes + " desde las " + hora + " hs., hasta las " + convertirFloatAHora(horaFinTurno(duracion)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
 }
 
-function messageTurnNotAvailable(dia, mes, hora) {
+function mensajeTurnoNoDisponible(dia, mes, hora) {
     return alert(invitadoEnSesion() + ", el turno que solicitaste no se encuentra disponible para el " + dia + "/" + mes + " a las " + hora + "hs.")
 }
 // fin de funciones
 
 // inicio de llamadas
 
-
 do {
-    inicio()
-    if (inicioValido()) {
+    menuInicio()
+    if (inicioValido() && !salida()) {
         let disponibilidad = false
         do {
             ingresoDatosDelTurno()
             if (disponible()) {
                 disponibilidad = true
-                if (confirmTurn()) {
-                    if (pagoReserva()) {
-                        messageConfirmTurn(diaTurno, mesTurno, hora, duracion)
-                    } else {
-                        alert("Turno no confirmado, debe abonar la seña.")
-                    }
+                if (confirmacionTurno() && pagoReserva()) {
+                    mensajeConfirmacionTurno(diaTurno, mesTurno, hora, duracion)
                 } else {
                     alert("Turno no confirmado.")
                 }
             } else {
-                messageTurnNotAvailable(diaTurno, mesTurno, duracion)
+                mensajeTurnoNoDisponible(diaTurno, mesTurno, duracion)
             }
         } while (!disponibilidad);
     }
-} while (!inicioValido());
+} while (!salida());
