@@ -7,3 +7,9 @@ La disponibilidad por ahora se genera de forma aleatoria.
 Aclaraciones:
 Existe un usuario para iniciar sessión como "Jardin" y la contraseña es "1234", se realiza más que nada para implementar lo aprendido.
 El registro de un nuevo usuario reemplazará al existente.
+
+Modificaciones para la segunda entrega: 
+Se agregó ciclo a todo el menu inicio, solamente se cierra al ingresar la opción 4.
+Se mejoró la validación al ingresar la opción "Cancelar".
+Modificaron los nombres de variables y funciones para estandarizarlas al castellano.
+Se unificó las funciones menu() e inicio() en menuInicio().
