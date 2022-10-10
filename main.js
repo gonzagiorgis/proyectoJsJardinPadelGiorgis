@@ -1,17 +1,18 @@
-let menuIni = "1 - Invitado\n2 - Ingresar como usuario\n3 - Registrase\n4 - Salir"
-let nombre = ""
-let phone = ""
-let usser = "Jardin"
-let pass = "1234"
-let optIni = ""
-let correctInvi = false
-let correctLoggin = false
+let menuInicio = "1 - Invitado\n2 - Ingresar como usuario\n3 - Registrase\n4 - Salir"
+let nombreInvitado = ""
+let telefono = ""
+let nombreUsuario = "Jardin"
+let password = "1234"
+let opcionInicio = ""
+let invitadoCorrecto = false
+let inicioSesionCorrecto = false
 let diaTurno = 0
 let mesTurno = 0
 let respuestaConsulta = ""
 let hora = 0
 let duracion = 0
-let creditCard = ""
+let tarjetaCredito = ""
+let mensaje = ""
 const ALIAS = "jardin-club"
 const PRECIOHORA = 2000
 const PRECIOHORAPROMO = 1000
@@ -19,71 +20,65 @@ const PRECIOHORALUZ = 2300
 
 // inicio de funciones
 
-const precio = dur => Number.parseFloat(dur * PRECIOHORA).toFixed(2)
-const precioConLuz = dur => Number.parseFloat(dur * PRECIOHORALUZ).toFixed(2)
-const precioPromo = dur => Number.parseFloat(dur * PRECIOHORAPROMO).toFixed(2)
-const horaFinTurno = dur => dur + hora
-const sign = monto => Number.parseFloat(monto * 0.4).toFixed(2)
+const precio = duracion => Number.parseFloat(duracion * PRECIOHORA).toFixed(2)
+const precioConLuz = duracion => Number.parseFloat(duracion * PRECIOHORALUZ).toFixed(2)
+const precioPromo = duracion => Number.parseFloat(duracion * PRECIOHORAPROMO).toFixed(2)
+const horaFinTurno = duracion => duracion + hora
+const reserva = monto => Number.parseFloat(monto * 0.4).toFixed(2)
 
-function validUsser(u, p) {
-    if ((u === usser) && (p === pass)) {
+function usuarioValido(usuario, pass) {
+    if ((nombreUsuario === usuario) && (password === pass)) {
         return true
     } else {
         return false
     }
 }
 
-function validEntry(item) {
+function entradaValida(entrada) {
     do {
-        t = prompt("Ingresa tu " + item + ":")
-        if (t == "") {
-            alert("Débes ingresar tu " + item + ".")
-        } else if (t == null) {
+        mensaje = prompt("Ingresa tu " + entrada + ":")
+        if (mensaje == "") {
+            alert("Débes ingresar tu " + entrada + ".")
+        } else if (mensaje == null) {
             break
         }
-    } while (t == "")
-    return t
+    } while (mensaje == "")
+    return mensaje
 }
 
-function validEntryTurn(item) {
+function entradaValidaTurno(entrada) {
     do {
-        t = prompt("Ingresa " + item + ":")
-        if (t == "") {
-            alert("Débes ingresar " + item + ".")
-        } else if (t == null) {
+        mensaje = prompt("Ingresa " + entrada + ":")
+        if (mensaje == "") {
+            alert("Débes ingresar " + entrada + ".")
+        } else if (mensaje == null) {
             break
         }
-    } while (t == "")
-    return t
-}
-
-function validHours(h) {
-    if (h) {
-
-    }
+    } while (mensaje == "")
+    return mensaje
 }
 
 function invitado() {
-    nombre = validEntry("nombre")
-    phone = validEntry("teléfono")
-    if (nombre != null && phone != null) {
-        alert("Bienvenido " + nombre)
-        correctInvi = true
+    nombreInvitado = entradaValida("nombre")
+    telefono = entradaValida("teléfono")
+    if (nombreInvitado != null && telefono != null) {
+        alert("Bienvenido " + nombreInvitado)
+        invitadoCorrecto = true
     } else {
         alert("Debes ingresar nombre y teléfono para poder solicitar o consultar turnos.")
     }
 }
 
-function usserLoggin() {
-    let usserLoad = ""
-    let passLoad = ""
+function inicioDeSesion() {
+    let usuarioIngresado = ""
+    let contraseñaIngresada = ""
     for (let i = 0; i <= 3; i += 1) {
         if (i < 3) {
-            usserLoad = validEntry("usuario")
-            passLoad = validEntry("contraseña")
-            if (validUsser(usserLoad, passLoad)) {
-                alert("Bienvenido " + usser)
-                correctLoggin = true
+            usuarioIngresado = entradaValida("usuario")
+            contraseñaIngresada = entradaValida("contraseña")
+            if (usuarioValido(usuarioIngresado, contraseñaIngresada)) {
+                alert("Bienvenido " + nombreUsuario)
+                inicioSesionCorrecto = true
                 break;
             } else {
                 alert("Usuario o contraseña incorrecto")
@@ -96,25 +91,25 @@ function usserLoggin() {
     }
 }
 
-function usserRegist() {
-    usser = validEntry("usuario")
-    phone = validEntry("teléfono")
-    pass = validEntry("contraseña")
-    if (usser != null && phone != null && pass != null) {
+function registroUsuario() {
+    nombreUsuario = entradaValida("usuario")
+    telefono = entradaValida("teléfono")
+    password = entradaValida("contraseña")
+    if (nombreUsuario != null && telefono != null && password != null) {
         for (let i = 0; i <= 3; i += 1) {
             if (i < 3) {
                 let passCheck = prompt("Ingresa nuevamente la contraseña:")
-                if (pass === passCheck) {
-                    alert("Gracias por registrarte " + usser + ", recuerda tu contraseña.")
-                    correctLoggin = true
+                if (password === passCheck) {
+                    alert("Gracias por registrarte " + nombreUsuario + ", recuerda tu contraseña.")
+                    inicioSesionCorrecto = true
                     break;
                 } else {
                     alert("La contraseña no coincide, vuelve a ingresarla.")
                 }
             } else {
                 alert("Contraseña incorrecta. Imposible registrar")
-                usser = ""
-                pass = ""
+                nombreUsuario = ""
+                password = ""
                 break;
             }
         }
@@ -123,11 +118,11 @@ function usserRegist() {
     }
 }
 
-function validOption(p) {
-    if (isNaN(p)) {
+function opcionValida(opcion) {
+    if (isNaN(opcion)) {
         return false
     } else {
-        if (p < 0 || p > 4) {
+        if (opcion < 0 || opcion > 4) {
             return false
         } else {
             return true
@@ -138,29 +133,27 @@ function validOption(p) {
 function menu() {
     alert("Bienvenido a Jardín Padel Club!\nEn esta sección podrás solicitar y reservar un turno.")
     do {
-        
-        optIni = Number(prompt("Opciones de ingreso: \n" + menuIni + "\nIngresa el número correspondiente a la opción deseada:"))
-        if (!validOption(optIni)) {
+        opcionInicio = Number(prompt("Opciones de ingreso: \n" + menuInicio + "\nIngresa el número correspondiente a la opción deseada:"))
+        if (!opcionValida(opcionInicio)) {
             alert("Debes ingresar una opción válida")
-        } else if (optIni == 0) {
+        } else if (opcionInicio == 0) {
             alert("Inicio cancelado - No ha ingresado opción")
             break
         }
-    } while (!validOption(optIni));
-    return optIni
+    } while (!opcionValida(opcionInicio));
+    return opcionInicio
 }
 
-function usserInSession() {
-    if (correctInvi) {
-        return nombre
+function invitadoEnSesion() {
+    if (invitadoCorrecto) {
+        return nombreInvitado
     } else {
-        return usser
+        return nombreUsuario
     }
 }
 
 function pronostico() {
     let suerte = Math.round(Math.random() * 3.3)
-
     switch (suerte) {
         case 1:
             return "parcialmente nublado"
@@ -186,24 +179,24 @@ function disponible() {
     }
 }
 
-function validLoggin() {
-    if (correctInvi == true || correctLoggin == true) {
+function inicioValido() {
+    if (invitadoCorrecto == true || inicioSesionCorrecto == true) {
         return true
     } else {
         return false
     }
 }
 
-function entryTurnData() {
+function ingresoDatosDelTurno() {
     do {
-        mesTurno = validEntryTurn("el mes (1-12)")
+        mesTurno = entradaValidaTurno("el mes (1-12)")
         if (isNaN(mesTurno) || mesTurno < 1 || mesTurno > 12) {
             alert("Mes ingresado inválido, ingresar nuevamente.")
         }
     } while (isNaN(mesTurno) || mesTurno < 1 || mesTurno > 12)
 
     do {
-        diaTurno = validEntryTurn("el día (1 a 31)")
+        diaTurno = entradaValidaTurno("el día (1 a 31)")
         if (isNaN(diaTurno) || diaTurno < 1 || diaTurno > 31) {
             alert("Día ingresado inválido, ingresar nuevamente.")
         } else {
@@ -212,7 +205,7 @@ function entryTurnData() {
     } while (isNaN(diaTurno) || diaTurno < 1 || diaTurno > 31)
 
     do {
-        hora = Number(validEntryTurn("la hora (8 a 23)"))
+        hora = Number(entradaValidaTurno("la hora (8 a 23)"))
         if (isNaN(hora) || hora < 8 || hora > 23) {
             alert("Hora ingresada inválida, ingresar nuevamente.")
         } else {
@@ -223,7 +216,7 @@ function entryTurnData() {
 
 
     do {
-        duracion = Number(validEntryTurn("la duración (Eje.: 1.5 = hora y media)"))
+        duracion = Number(entradaValidaTurno("la duración (Eje.: 1.5 = hora y media)"))
         if (isNaN(duracion) || duracion < 1 || duracion > 4) {
             alert("Duración ingresada inválida, ingresar nuevamente.")
         } else {
@@ -243,28 +236,27 @@ function precioFinal() {
     }
 }
 
-function convertHora(h) {
+function convertirFloatAHora(h) {
     let hora = parseInt(h)
     let minutos = parseInt(60 * (h - hora))
     return hora + ":" + minutos + "hs."
 }
 
-function loggin() {
+function inicio() {
     switch (menu()) {
         case 1:
             invitado()
             break;
 
         case 2:
-            usserLoggin()
+            inicioDeSesion()
             break;
 
         case 3:
-            usserRegist()
+            registroUsuario()
             break;
-
         case 4:
-            alert("¡Vuelve pronto, " + usserInSession + "!")
+            alert("¡Vuelve pronto, " + invitadoEnSesion + "!")
             break;
         default:
             break;
@@ -272,62 +264,60 @@ function loggin() {
 }
 
 function confirmTurn() {
-    return confirm(usserInSession() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n Seña para reservar el turno: $" + sign(precioFinal()) + "\n¿Deseas confirmarlo?")
+    return confirm(invitadoEnSesion() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n Seña para reservar el turno: $" + reserva(precioFinal()) + "\n¿Deseas confirmarlo?")
 }
 
-function signPay() {
-    let opt = Number(prompt("Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia"))
+function pagoReserva() {
+    let opcionPago = Number(prompt("Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia"))
     // let pay = false
     do {
 
-        if (!validOption(opt)) {
+        if (!opcionValida(opcionPago)) {
             alert("Debes ingresar una opción válida")
-        } else if (opt == 0) {
+        } else if (opcionPago == 0) {
             alert("Cancelado el pago de la seña - No ha ingresado datos.")
             break
         }
-    } while (!validOption(opt));
+    } while (!opcionValida(opcionPago));
     // do {
-    switch (opt) {
+    switch (opcionPago) {
         case 1:
-            creditCard = prompt("Ingresa el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
-            // pay = true
+            tarjetaCredito = prompt("Ingresa el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
             return true
             break
         case 2:
-            // pay = true
-            alert(usserInSession +" realiza la transferencia al siguiente alias: " + ALIAS + "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
+            alert(invitadoEnSesion() + " realiza la transferencia al siguiente alias: " + ALIAS + "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
             return true
             break
         default:
-            // pay = false
             return false
             break
     }
     // } while (!pay)
 }
 
-function messageConfirmTurn(dia, mes, h, d) {
-    return alert(usserInSession() + " confirmamos tu turno para el " + dia + "/" + mes + " desde las " + h + " hs., hasta las " + convertHora(horaFinTurno(d)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
+function messageConfirmTurn(dia, mes, hora, duracion) {
+    return alert(invitadoEnSesion() + " confirmamos tu turno para el " + dia + "/" + mes + " desde las " + hora + " hs., hasta las " + convertirFloatAHora(horaFinTurno(duracion)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
 }
 
-function messageTurnNotAvailable(dia, mes, h) {
-    return alert(usserInSession() + ", el turno que solicitaste no se encuentra disponible para el " + dia + "/" + mes + " a las " + h + "hs.")
+function messageTurnNotAvailable(dia, mes, hora) {
+    return alert(invitadoEnSesion() + ", el turno que solicitaste no se encuentra disponible para el " + dia + "/" + mes + " a las " + hora + "hs.")
 }
 // fin de funciones
 
 // inicio de llamadas
 
-loggin()
+
 do {
-    if (validLoggin()) {
-        let dispo = false
+    inicio()
+    if (inicioValido()) {
+        let disponibilidad = false
         do {
-            entryTurnData()
+            ingresoDatosDelTurno()
             if (disponible()) {
-                dispo = true
+                disponibilidad = true
                 if (confirmTurn()) {
-                    if (signPay()) {
+                    if (pagoReserva()) {
                         messageConfirmTurn(diaTurno, mesTurno, hora, duracion)
                     } else {
                         alert("Turno no confirmado, debe abonar la seña.")
@@ -338,9 +328,6 @@ do {
             } else {
                 messageTurnNotAvailable(diaTurno, mesTurno, duracion)
             }
-        } while (!dispo);
-
-    } else {
-        alert("Datos incorrectos para iniciar la consulta. Intente nuevamente")
+        } while (!disponibilidad);
     }
-} while (!validLoggin);
+} while (!inicioValido());
