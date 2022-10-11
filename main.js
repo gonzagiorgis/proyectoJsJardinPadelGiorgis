@@ -399,9 +399,6 @@ function agregarTurnoConfirmado() {
     turnosConfirmados.push(turnoAConsultar)
 }
 
-function borrarTurnoAConsultar() {
-    turnoAConsultar = ""
-}
 // fin de funciones
 
 // inicio de llamadas
