@@ -410,7 +410,6 @@ do {
             ingresoDatosDelTurno()
             if (disponible()) {
                 if (confirmacionTurno() && pagoReserva()) {
-
                     turnoAConsultar.mensajeConfirmacionTurno()
                     pronostico()
                     break
