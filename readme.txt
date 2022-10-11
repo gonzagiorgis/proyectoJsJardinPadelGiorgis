@@ -14,4 +14,6 @@ Se mejoró la validación al ingresar la opción "Cancelar".
 Se modificaron los nombres de variables y funciones para estandarizarlas al castellano.
 Se unificó las funciones menu() e inicio() en menuInicio().
 Se agregó el array usuarios y se elimina el usuario predeterminado, ahora para ingresar por la opción inicio de sesión previamente se debe registrar.
+Se agregó array de objetos turnos con los turnos confirmados con los cuales se chequea la disponibilidad de los turnos que se soliciten posteriormente,
+se eliminó la función ramdom que generaba la disponibilidad aleatoria del turno.
 Los usuarios registrados acceden aun descuento.
