@@ -4,12 +4,14 @@ La idea es generar una app para la consulta de turnos para el club de padel Jard
 Luego seleccionar día, hora y duración del turno.
 La disponibilidad por ahora se genera de forma aleatoria.
 
-Aclaraciones:
+Aclaraciones Primera Entrega:
 Existe un usuario para iniciar sessión como "Jardin" y la contraseña es "1234", se realiza más que nada para implementar lo aprendido.
 El registro de un nuevo usuario reemplazará al existente.
 
-Modificaciones para la segunda entrega: 
+Aclaraciones segunda entrega: 
 Se agregó ciclo a todo el menu inicio, solamente se cierra al ingresar la opción 4.
 Se mejoró la validación al ingresar la opción "Cancelar".
-Modificaron los nombres de variables y funciones para estandarizarlas al castellano.
+Se modificaron los nombres de variables y funciones para estandarizarlas al castellano.
 Se unificó las funciones menu() e inicio() en menuInicio().
+Se agregó el array usuarios y se elimina el usuario predeterminado, ahora para ingresar por la opción inicio de sesión previamente se debe registrar.
+Los usuarios registrados acceden aun descuento.

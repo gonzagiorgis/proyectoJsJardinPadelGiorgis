@@ -12,6 +12,7 @@ let hora = 0
 let duracion = 0
 let tarjetaCredito = ""
 let mensaje = ""
+let turnoAConsultar = ""
 const ALIAS = "jardin-club"
 const PRECIOHORA = 2000
 const PRECIOHORAPROMO = 1000
@@ -24,40 +25,51 @@ const turnosConfirmados = []
 
 const salida = () => opcionInicio === "4"
 class Turno {
-    constructor(usuario, fecha, hora, duracion) {
+    constructor(usuario, telefono, fecha, hora, duracion) {
         this.usuario = usuario
+        this.telefono = telefono
         this.fecha = fecha
         this.hora = hora
         this.duracion = duracion
     }
 
-    precio = duracion => Number.parseFloat(duracion * PRECIOHORA).toFixed(2)
-    precioConLuz = duracion => Number.parseFloat(duracion * PRECIOHORALUZ).toFixed(2)
-    precioPromo = duracion => Number.parseFloat(duracion * PRECIOHORAPROMO).toFixed(2)
-    horaFinTurno = duracion => duracion + hora
-    reserva = monto => Number.parseFloat(monto * 0.4).toFixed(2)
+    precio = () => Number.parseFloat(this.duracion * PRECIOHORA).toFixed(2)
+    precioConLuz = () => Number.parseFloat(this.duracion * PRECIOHORALUZ).toFixed(2)
+    precioPromo = () => Number.parseFloat(this.duracion * PRECIOHORAPROMO).toFixed(2)
+    horaFinTurno = () => this.duracion + this.hora
+
     precioFinal() {
         let precio = 0
         if (hora < 17) {
-            precio = precioPromo(duracion)
+            precio = this.precioPromo()
         } else if (hora > 19) {
-            precio = precioConLuz(duracion)
+            precio = this.precioConLuz()
         } else {
-            precio = precio(duracion)
+            precio = this.precio()
         }
         if (inicioSesionCorrecto === true) {
             precio -= precio * DESCUENTOUSUARIOREGISTRADO
         }
         return precio
     }
-}
 
+    montoDeReserva() {
+        return Number.parseFloat(this.precioFinal()).toFixed(2)
+    }
+
+    mensajeConfirmacionTurno() {
+        return alert(this.usuario + " confirmamos tu turno para el " + this.fecha + " desde las " + this.hora + " hs., hasta las " + convertirFloatAHora(this.horaFinTurno()) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.")
+    }
+
+    mensajeTurnoNoDisponible() {
+        return alert(this.usuario + ", el turno que solicitaste no se encuentra disponible para el " + this.fecha + " a las " + this.hora + "hs.")
+    }
+}
 class Usuario {
     constructor(nombre, password, telefono,) {
         this.nombre = nombre
         this.password = password
         this.telefono = telefono
-
     }
 
     paswordCorrecto(password) {
@@ -69,14 +81,6 @@ class Usuario {
     }
 }
 
-// acordase de eliminar estas ya que se encuentran como metodos en la clase turnos
-const precio = duracion => Number.parseFloat(duracion * PRECIOHORA).toFixed(2)
-const precioConLuz = duracion => Number.parseFloat(duracion * PRECIOHORALUZ).toFixed(2)
-const precioPromo = duracion => Number.parseFloat(duracion * PRECIOHORAPROMO).toFixed(2)
-const horaFinTurno = duracion => duracion + hora
-const reserva = monto => Number.parseFloat(monto * 0.4).toFixed(2)
-
-
 function usuarioValido(nombreUsuario, pass) {
     const usuarioEncontrado = usuariosRegistrados.find((usu) => usu.nombre === nombreUsuario)
     if (usuarioEncontrado != undefined && usuarioEncontrado.paswordCorrecto(pass)) {
@@ -86,10 +90,10 @@ function usuarioValido(nombreUsuario, pass) {
     }
 }
 
-function usuarioExistente(nombreUsuario){
-    if( usuariosRegistrados.find((usu) => usu.nombre === nombreUsuario)===undefined){
+function usuarioExistente(nombreUsuario) {
+    if (usuariosRegistrados.find((usu) => usu.nombre === nombreUsuario) === undefined) {
         return false
-    } else{
+    } else {
         return true
     }
 }
@@ -150,29 +154,27 @@ function inicioDeSesion() {
             inicioSesionCorrecto = false
             break
         }
-
     }
 }
 
 function registroUsuario() {
-    let nombreIngresado =""
-    do{
-    nombreIngresado = entradaValida("usuario")
-    if(usuarioExistente(nombreIngresado)){
-        alert("Usuario existente, ingresa otro nombre de usuario.")
-    }
-    }while(usuarioExistente(nombreIngresado))
+    let nombreIngresado = ""
+    do {
+        nombreIngresado = entradaValida("usuario")
+        if (usuarioExistente(nombreIngresado)) {
+            alert("Usuario existente, ingresa otro nombre de usuario.")
+        }
+    } while (usuarioExistente(nombreIngresado))
 
     let telefonoIngresado = entradaValida("teléfono")
     let password = entradaValida("contraseña")
-    
+
     if (nombreIngresado != null && telefonoIngresado != null && password != null) {
         for (let i = 0; i <= 3; i += 1) {
             if (i < 3) {
                 let passCheck = prompt("Ingresa nuevamente la contraseña:")
                 if (password === passCheck) {
                     alert("Gracias por registrarte " + nombreIngresado + ", recuerda tu contraseña.")
-                    // const usu = new Usuario(nombreIngresado, password, telefonoIngresado)
                     usuariosRegistrados.push(new Usuario(nombreIngresado, password, telefonoIngresado))
                     inicioSesionCorrecto = true
                     usuarioEnSesion = nombreIngresado
@@ -217,7 +219,7 @@ function opcionValidaPago(opcion) {
 }
 
 function menuInicio() {
-    alert("Bienvenido a Jardín Padel Club!\nEn esta sección podrás solicitar y reservar un turno. \nRecuerda que si eres usuario registrado accedes a un descuento del " + (DESCUENTOUSUARIOREGISTRADO*100) +"%")
+    alert("Bienvenido a Jardín Padel Club!\nEn esta sección podrás solicitar y reservar un turno. \nRecuerda que si eres usuario registrado accedes a un descuento del " + (DESCUENTOUSUARIOREGISTRADO * 100) + "%")
     do {
         opcionInicio = prompt("Opciones de ingreso: \n" + listaMenuInicio + "\nIngresa el número correspondiente a la opción deseada:")
         if (opcionInicio === null) {
@@ -232,11 +234,9 @@ function menuInicio() {
         case "1":
             invitado()
             break;
-
         case "2":
             inicioDeSesion()
             break;
-
         case "3":
             registroUsuario()
             break;
@@ -246,53 +246,72 @@ function menuInicio() {
         default:
             break;
     }
-
 }
-
 
 
 function nombreEnSesion() {
     if (invitadoCorrecto) {
         return nombreInvitado
-    } else {
+    } else if (inicioSesionCorrecto) {
         return usuarioEnSesion
     }
+}
+
+function telefonoEnSesion() {
+    if (invitadoCorrecto) {
+        return telefonoInvitado
+    } else if (inicioSesionCorrecto) {
+        return usuariosRegistrados.find((usu) => usu.nombre === nombreEnSesion()).telefono
+    } else {
+        return "no informado"
+    }
+}
+
+function inicioValido() {
+    if (invitadoCorrecto === true || inicioSesionCorrecto === true) {
+        return true
+    } else {
+        return false
+    }
+}
+
+function reiniciarMarcasInicio() {
+    invitadoCorrecto = false
+    inicioSesionCorrecto = false
 }
 
 function pronostico() {
     let suerte = Math.round(Math.random() * 3.3)
     switch (suerte) {
         case 1:
-            return "parcialmente nublado"
+            return alert("El pronostico para ese dìa indica parcialmente nublado. ¡Los esperamos!\nJardín Padel Club")
             break
         case 2:
-            return "nublado"
+            return alert("El pronostico para ese dìa indica nublado. ¡Los esperamos!\nJardín Padel Club")
             break
         case 3:
-            return "probabilidad de lluvia, es solo un pronóstico ;)"
+            return alert("El pronostico para ese dìa indica probabilidad de lluvia, es solo un pronóstico ;). ¡Los esperamos!\nJardín Padel Club")
             break
         default:
-            return "soleado"
+            return alert("El pronostico para ese día indica soleado, ¡no te lo pierdas, los esperamos!\nJardín Padel Club")
             break
     }
 }
 
 function disponible() {
-    let a = Math.random()
-    if (a > 0.5) {
+
+    if (turnosConfirmados.length == 0) {
+        agregarTurnoConfirmado()
         return true
-    } else {
+    } else if (turnosConfirmados.some((turno) => turno.fecha == fechaTurno()) && turnosConfirmados.some((turno) => turno.hora == hora)) {
+
         return false
+    } else {
+        agregarTurnoConfirmado()
+        return true
     }
 }
 
-function inicioValido() {
-    if (invitadoCorrecto == true || inicioSesionCorrecto == true) {
-        return true
-    } else {
-        return false
-    }
-}
 
 function ingresoDatosDelTurno() {
     do {
@@ -321,7 +340,6 @@ function ingresoDatosDelTurno() {
 
     } while (isNaN(hora) || hora < 8 || hora > 23)
 
-
     do {
         duracion = Number(entradaValidaTurno("la duración (Eje.: 1.5 = hora y media)"))
         if (isNaN(duracion) || duracion < 1 || duracion > 4) {
@@ -331,21 +349,12 @@ function ingresoDatosDelTurno() {
         }
 
     } while (isNaN(duracion) || duracion < 1 || duracion > 4)
+
+    turnoAConsultar = new Turno(nombreEnSesion(), telefonoEnSesion(), fechaTurno(), hora, duracion)
 }
 
-function precioFinal() {
-    let precio = 0
-    if (hora < 17) {
-        precio = precioPromo(duracion)
-    } else if (hora > 19) {
-        precio = precioConLuz(duracion)
-    } else {
-        precio = precio(duracion)
-    }
-    if (inicioSesionCorrecto === true) {
-        precio -= precio * DESCUENTOUSUARIOREGISTRADO
-    }
-    return precio
+function fechaTurno() {
+    return diaTurno + "/" + mesTurno
 }
 
 function convertirFloatAHora(h) {
@@ -355,8 +364,7 @@ function convertirFloatAHora(h) {
 }
 
 function confirmacionTurno() {
-
-    return confirm(nombreEnSesion() + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + precioFinal() + "\n Seña para reservar el turno: $" + reserva(precioFinal()) + "\n¿Deseas confirmarlo?")
+    return confirm(turnoAConsultar.usuario + ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" + turnoAConsultar.precioFinal() + "\n Seña para reservar el turno: $" + turnoAConsultar.montoDeReserva() + "\n¿Deseas confirmarlo?")
 }
 
 function pagoReserva() {
@@ -371,7 +379,6 @@ function pagoReserva() {
         }
     } while (!opcionValidaPago(opcionPago));
 
-
     switch (opcionPago) {
         case "1":
             tarjetaCredito = prompt("Ingresa el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña")
@@ -382,24 +389,18 @@ function pagoReserva() {
             return true
             break
         default:
-            console.log(opcionPago)
-            console.log(opcionValidaMenuInicio(opcionPago))
             return false
             break
     }
 
 }
 
-function agregarTurnoConfirmado(){
-    turnosConfirmados.push(new Turno (usuarioEnSesion, diaTurno+"/"+mesTurno, hora, duracion))
+function agregarTurnoConfirmado() {
+    turnosConfirmados.push(turnoAConsultar)
 }
 
-function mensajeConfirmacionTurno(dia, mes, hora, duracion) {
-    return alert(nombreEnSesion() + " confirmamos tu turno para el " + dia + "/" + mes + " desde las " + hora + " hs., hasta las " + convertirFloatAHora(horaFinTurno(duracion)) + "\nTen en cuenta que el valor del turno puede variar dependiendo del uso de la luz a pedido de los jugadores.\nPronóstico para ese día: " + pronostico() + ".\n ¡Los esperamos!\nJardín Padel Club")
-}
-
-function mensajeTurnoNoDisponible(dia, mes, hora) {
-    return alert(nombreEnSesion() + ", el turno que solicitaste no se encuentra disponible para el " + dia + "/" + mes + " a las " + hora + "hs.")
+function borrarTurnoAConsultar() {
+    turnoAConsultar = ""
 }
 // fin de funciones
 
@@ -408,23 +409,22 @@ function mensajeTurnoNoDisponible(dia, mes, hora) {
 do {
     menuInicio()
     if (inicioValido() && !salida()) {
-        let disponibilidad = false
         do {
             ingresoDatosDelTurno()
             if (disponible()) {
-                disponibilidad = true
                 if (confirmacionTurno() && pagoReserva()) {
-                    mensajeConfirmacionTurno(diaTurno, mesTurno, hora, duracion)
-                    agregarTurnoConfirmado()
+
+                    turnoAConsultar.mensajeConfirmacionTurno()
+                    pronostico()
+                    break
                 } else {
                     alert("Turno no confirmado.")
                 }
             } else {
-                mensajeTurnoNoDisponible(diaTurno, mesTurno, duracion)
+                turnoAConsultar.mensajeTurnoNoDisponible()
             }
-        } while (!disponibilidad);
+        } while (!disponible())
     }
-    console.log(usuariosRegistrados)
+    reiniciarMarcasInicio()
 } while (!salida());
 
-console.log(turnosConfirmados)
