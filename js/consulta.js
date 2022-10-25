@@ -63,12 +63,6 @@ const enviarForm = function () {
       turnoAConsultar.mensajeTurnoNoDisponible();
       borrarTurnoAConsultar();
     }
-    // }
-    //  else {
-    //   alert(
-    //     "Turno con datos invalidos para la consulta. Completa correctamente el formulario."
-    //   );
-    // }
   });
 };
 
@@ -91,8 +85,6 @@ function ingresoDatosDelTurno() {
     duracion
   );
   sessionStorage.setItem("turnoAConsultar", JSON.stringify(turnoAConsultar));
-
-  console.log(turnoAConsultar);
 }
 
 function confirmacionTurno() {
@@ -149,54 +141,10 @@ function agregarTurnoConfirmado() {
   localStorage.setItem("turnos", JSON.stringify(turnosConfirmados));
 }
 
-// function imprimir() {
-//   console.log("Usuarios registrados:----------");
-//   console.log(JSON.parse(localStorage.getItem("usuarios")));
-//   console.log("Turnos:----------");
-//   console.log(JSON.parse(localStorage.getItem("turnos")));
-//   console.log("Turno a consultar:----------");
-//   console.log(JSON.parse(localStorage.getItem(turnoAConsultar)));
-//   console.log("Ubicacio consulta:---------");
-//   console.log(window.location.href.includes("consulta"));
-//   console.log("nombreEnSesion consulta:---------");
-//   console.log(nombreEnSesion);
-//   console.log(typeof nombreEnSesion);
-//   console.log(mensajeBienvenida);
-//   console.log("datos turno-------------");
-//   console.log(nombreEnSesion);
-//   console.log(telefonoEnSesion);
-
-// }
-
 const borrarTurnoAConsultar = function () {
   turnoAConsultar = {};
   sessionStorage.removeItem("turnoAConsultar");
 };
 
-// const consulta = function () {
-//   enviarForm();
-// ingresoDatosDelTurno();
-// if (turnoConDatosValidos()) {
-//   if (disponible()) {
-//     if (confirmacionTurno() && pagoReserva()) {
-//       turnoAConsultar.mensajeConfirmacionTurno();
-//       pronostico();
-//       // borrarTurnoAConsultar();
-//     } else {
-//       alert("Turno no confirmado.");
-//       // borrarTurnoAConsultar();
-//     }
-//   } else {
-//     turnoAConsultar.mensajeTurnoNoDisponible();
-//     //   borrarTurnoAConsultar();
-//   }
-// } else {
-//   alert(
-//     "Turno con datos invalidos para la consulta. Completa correctamente el formulario."
-//   );
-// }
-// };
-
 mensajeBienvenida();
 enviarForm();
-// consulta();

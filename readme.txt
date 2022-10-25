@@ -17,3 +17,9 @@ Se agregó el array usuarios y se elimina el usuario predeterminado, ahora para 
 Se agregó array de objetos turnos con los turnos confirmados con los cuales se chequea la disponibilidad de los turnos que se soliciten posteriormente,
 se eliminó la función ramdom que generaba la disponibilidad aleatoria del turno.
 Los usuarios registrados acceden aun descuento.
+
+Aclaraciones tercera entrega:
+Se agrega html para el ingreso de seción y datos del turno por formulario.
+Se almacena en localStorage arrays de objetos de usuarios registrados y turnos confirmados.
+El boton Salir del formulario elimina los datos de la sesion para el ingreso de un nuevo usuario (nombre, telefono, pass almacenados el sessionStorage) 
+y vuelva a la pagina principal.

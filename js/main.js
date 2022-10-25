@@ -8,12 +8,12 @@ let tarjetaCredito = "";
 let mensaje = "";
 let turnoAConsultar = {};
 let formulario = document.getElementById("formulario");
-
 const ALIAS = "jardin-club";
 const PRECIOHORA = 2000;
 const PRECIOHORAPROMO = 1000;
 const PRECIOHORALUZ = 2300;
 const DESCUENTOUSUARIOREGISTRADO = 0.05;
+const PORCENTAJERESERVA = 0.5;
 let usuariosRegistrados = [];
 let turnosConfirmados = [];
 
@@ -52,7 +52,7 @@ class Turno {
   }
 
   montoDeReserva() {
-    return Number.parseFloat(this.precioFinal()).toFixed(2);
+    return Number.parseFloat(this.precioFinal()).toFixed(2) * PORCENTAJERESERVA;
   }
 
   mensajeConfirmacionTurno() {
@@ -210,19 +210,14 @@ function registroUsuario() {
       if (i < 3) {
         let passCheck = prompt("Ingresa nuevamente la contraseña:");
         if (password === passCheck) {
-          alert(
-            "Gracias por registrarte " +
-              nombreIngresado +
-              ", recuerda tu contraseña."
-          );
           usuariosRegistrados.push(
             new Usuario(nombreIngresado, password, telefonoIngresado)
           );
           localStorage.setItem("usuarios", JSON.stringify(usuariosRegistrados));
           inicioSesionCorrecto = true;
-          sessionStorage.setItem("usuarioEnSesion", nombreIngresado);
+          usuarioEnSesion = nombreIngresado;
+          sessionStorage.setItem("usuarioEnSesion", usuarioEnSesion);
           window.location.assign("consulta.html");
-
           break;
         } else {
           alert("La contraseña no coincide, vuelve a ingresarla.");
@@ -237,6 +232,7 @@ function registroUsuario() {
   } else {
     alert("Faltan datos para proceder con el registro.");
   }
+  sessionStorage.setItem("inicioSesionCorrecto", inicioSesionCorrecto);
 }
 
 function opcionValidaMenuInicio(opcion) {
@@ -264,13 +260,13 @@ function opcionValidaPago(opcion) {
 }
 
 function nombreEnSesion() {
+  let nombre = "";
   if (invitadoCorrecto) {
-    nombreInvitado = sessionStorage.getItem("invitadoEnSesion");
-    return nombreInvitado;
+    nombre = sessionStorage.getItem("invitadoEnSesion");
   } else if (inicioSesionCorrecto) {
-    usuarioEnSesion = sessionStorage.getItem("usuarioEnSesion");
-    return usuarioEnSesion;
+    nombre = sessionStorage.getItem("usuarioEnSesion");
   }
+  return nombre;
 }
 
 function telefonoEnSesion() {
@@ -278,7 +274,7 @@ function telefonoEnSesion() {
     return sessionStorage.getItem("telefonoInvitado");
   } else if (inicioSesionCorrecto) {
     return JSON.parse(localStorage.getItem("usuarios")).find(
-      (usu) => usu.nombre === nombreEnSesion()
+      (usu) => usu.nombre === usuarioEnSesion
     ).telefono;
   }
 }
