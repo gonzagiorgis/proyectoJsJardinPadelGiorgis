@@ -1,0 +1,69 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;900&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: rgb(246, 245, 245);
+}
+
+.encabezado {
+    display: flex;
+    position: relative;
+    top: 0;
+    height: 15vh;
+    background-color: rgba(22, 135, 167, 0.85);
+    color: rgb(246, 245, 245);
+    backdrop-filter: blur(5px);
+}
+
+.mensajeBienvenida {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 300;
+
+}
+
+.textoComun {
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+
+
+}
+
+#titulo {
+    font-weight: 400;
+    font-size: 1.5rem;
+    text-align: center;
+    height: fit-content;
+    padding: 3px;
+    margin: auto 10px auto auto;
+
+}
+
+.fondo {
+    background-image: url(../img/fondo.jpg);
+    background-size: cover;
+}
+
+
+
+
+.labels__container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: rgb(95, 95, 95);
+    padding: 3px 5px;
+}
+
+.campo__formulario--turno {
+    border: solid rgb(153, 153, 153) 1px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    border-radius: 3px;
+    width: 80vw;
+
+}
