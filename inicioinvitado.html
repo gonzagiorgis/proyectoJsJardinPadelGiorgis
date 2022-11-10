@@ -1,18 +1,18 @@
 <form id="invitado" action="" class="position-relative p-1">
     <fielset class="campo__formulario--turno box__shadow mx-auto flex-column">
-        <legend class="text-center">Ingresa como invitado</legend>
+        <legend class="text-center textoComun">Ingresa como invitado</legend>
         <div class="labels__container d-flex align-items-center">
-            <label for="nombreInvitado">Ingresa tu nombre:</label>
+            <label for="nombreInvitado" class="textoComun">Ingresa tu nombre:</label>
             <input type="text" name="nombreInvitado" id="nombreInvitado">
         </div>
         <div class="labels__container d-flex align-items-center">
-            <label for="telefonoInvitado">Ingresa tu número de telefono:</label>
+            <label for="telefonoInvitado" class="textoComun">Ingresa tu número de telefono:</label>
             <input type="text" name="telefonoInvitado" id="telefonoInvitado">
         </div>
     </fielset>
     <div class="buton__container d-flex justify-content-center">
-        <input type="reset" value="Limpiar" class="m-1">
-        <input type="submit" id="submit" value="Ingresar" class="m-1">
-        <input type="button" value="Salir" class="m-1" onclick="salir()">
+        <input type="reset" value="Limpiar" class="m-1 btn__orig">
+        <input type="submit" id="submit" value="Ingresar" class="m-1 btn__orig">
+        <input type="button" value="Salir" class="m-1 btn__orig" onclick="salir()">
     </div>
 </form>

@@ -22,23 +22,23 @@
 <body>
     <header class="encabezado d-flex justify-content-between">
         <img src="img/logowhite.svg" alt="" srcset="" class="px-3">
-        <h1 id="titulo" class="">Consulta de Turnos</h1>
+        <h1 id="titulo" class="textoComun">Consulta de Turnos</h1>
     </header>
     <h2 id="mensajeBienvenida" class="mensajeBienvenida">Bienvenido</h2>
     <form id="formulario" action="" class="position-relative p-1">
         <fieldset class="campo__formulario--turno box__shadow mx-auto flex-column">
-            <legend class="text-center">Datos del turno</legend>
+            <legend class="text-center textoComun">Datos del turno</legend>
             <div class="labels__container d-flex align-items-center">
-                <label for="fecha">Selecciona la fecha del turno:</label>
+                <label for="fecha" class="textoComun">Selecciona la fecha del turno:</label>
                 <input type="date" id="fecha" class="input__text" name="fecha" required>
             </div>
             <div class="labels__container d-flex align-items-center">
-                <label for="horario">Indica la hora del turno:</label>
+                <label for="horario" class="textoComun">Indica la hora del turno:</label>
                 <input type="time" id="horario" class="input__text" name=hora min="8:00" max="23:00" step="1800"
                     required>
             </div>
             <div class="labels__container d-flex align-items-center">
-                <label for="duracion">Indica la duración del turno:</label>
+                <label for="duracion" class="textoComun">Indica la duración del turno:</label>
                 <ul id="duracion" class="flex-column lista">
                     <li>
                         <input class="radio" value="1" type="radio" id="1hora" name="duracionturno">

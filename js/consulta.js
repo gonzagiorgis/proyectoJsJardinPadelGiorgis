@@ -3,43 +3,23 @@ function mensajeBienvenida() {
   mensajeBienvenida.innerText = `Bienvenido/a ${nombreEnSesion()}`;
 }
 
-function disponible() {
-  if (JSON.parse(localStorage.getItem("turnos"))) {
-    turnosConfirmados = JSON.parse(localStorage.getItem("turnos"));
-  }
-  if (
-    turnosConfirmados.some((turno) => turno.fecha == turnoAConsultar.fecha) &&
-    turnosConfirmados.some((turno) => turno.hora == turnoAConsultar.hora)
-  ) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-function pronostico() {
-  let suerte = Math.round(Math.random() * 3.3);
-  switch (suerte) {
-    case 1:
-      return alert(
-        "El pronostico para ese dìa indica parcialmente nublado. ¡Los esperamos!\nJardín Padel Club"
-      );
-
-    case 2:
-      return alert(
-        "El pronostico para ese dìa indica nublado. ¡Los esperamos!\nJardín Padel Club"
-      );
-
-    case 3:
-      return alert(
-        "El pronostico para ese dìa indica probabilidad de lluvia, es solo un pronóstico ;). ¡Los esperamos!\nJardín Padel Club"
-      );
-
-    default:
-      return alert(
-        "El pronostico para ese día indica soleado, ¡no te lo pierdas, los esperamos!\nJardín Padel Club"
-      );
-  }
+function disponible(turno) {
+  let { fecha, hora } = turno;
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (JSON.parse(localStorage.getItem("turnos"))) {
+        turnosConfirmados = JSON.parse(localStorage.getItem("turnos"));
+      }
+      if (
+        turnosConfirmados.some((t) => t.fecha == fecha) &&
+        turnosConfirmados.some((t) => t.hora == hora)
+      ) {
+        reject();
+      } else {
+        resolve();
+      }
+    });
+  }, 2000);
 }
 
 const enviarForm = function () {
@@ -47,26 +27,27 @@ const enviarForm = function () {
   formulario.addEventListener("submit", (evt) => {
     evt.preventDefault();
 
-    ingresoDatosDelTurno();
-    // if (turnoConDatosValidos()) {
-    if (disponible()) {
-      if (confirmacionTurno() && pagoReserva()) {
-        turnoAConsultar.mensajeConfirmacionTurno();
-        agregarTurnoConfirmado();
-        pronostico();
+    ingresoDatosDelTurno(formulario);
+
+    disponible(turnoAConsultar)
+      .then(() => {
+        console.log(disponible(turnoAConsultar));
+        confirmacionTurno();
+        if (confirmacionTurno()) {
+          turnoAConsultar.mensajeConfirmacionTurno();
+          pronostico();
+          borrarTurnoAConsultar();
+        }
+      })
+      .catch((error) => {
+        turnoAConsultar.mensajeTurnoNoDisponible();
         borrarTurnoAConsultar();
-      } else {
-        alert("Turno no confirmado.");
-        borrarTurnoAConsultar();
-      }
-    } else {
-      turnoAConsultar.mensajeTurnoNoDisponible();
-      borrarTurnoAConsultar();
-    }
+        return error;
+      });
   });
 };
 
-function ingresoDatosDelTurno() {
+function ingresoDatosDelTurno(formulario) {
   let duracionIngresada = formulario.getElementsByClassName("radio");
   let fechaIngresada = formulario.fecha.value;
   let horaIngresada = formulario.hora.value;
@@ -88,68 +69,35 @@ function ingresoDatosDelTurno() {
 }
 
 function confirmacionTurno() {
-  return confirm(
-    turnoAConsultar.usuario +
-      ", el turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" +
+  let confirmado = false;
+  Swal.fire({
+    title:
+      "El turno que solicitaste se encuentra disponible.\nPrecio aproximado: $" +
       turnoAConsultar.precioFinal() +
       "\n Seña para reservar el turno: $" +
       turnoAConsultar.montoDeReserva() +
-      "\n¿Deseas confirmarlo?"
-  );
-}
-
-function pagoReserva() {
-  let opcionPago = prompt(
-    "Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia"
-  );
-  // Swal.fire({
-  //   title: "Selecciona un medio de pago para la seña:",
-  //   showCancelButton: true,
-  //   confirmButtonText: "Tarjeta de credito",
-  //   confirmButtonText: "Transferencia",
-  //   showCancelButton: true
-  //   cancelButtonText: "Cancelar"
-  // }).then((result) => {
-  //   /* Read more about isConfirmed, isDenied below */
-  //   if (result.isConfirmed) {
-  //     Swal.fire("Saved!", "", "success");
-  //   } else if (result.isDenied) {
-  //     Swal.fire("Changes are not saved", "", "info");
-  //   }
-  // });
-
-  do {
-    if (opcionPago === null) {
-      alert("Pago de la seña cancelado.");
-      break;
-    } else if (!opcionValidaPago(opcionPago)) {
-      alert("Debes ingresar una opción válida");
-      opcionPago = prompt(
-        "Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia"
+      "\n¿Deseas confirmarlo?",
+    showDenyButton: true,
+    confirmButtonText: "Confirmar",
+    denyButtonText: `Cancelar`,
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      confirmado = true;
+      Swal.fire(
+        "Turno confirmado, para completar la reserva debes transferir la seña de $" +
+          turnoAConsultar.montoDeReserva() +
+          " al siguiente alias: " +
+          ALIAS,
+        "Recuerda que tienes hasta 2 horas para realizar el pago, de lo contrario el turno quedará liberado.",
+        "success",
+        agregarTurnoConfirmado()
       );
+    } else if (result.isDenied) {
+      Swal.fire("El turno no ha sido reservado", "", "info");
     }
-  } while (!opcionValidaPago(opcionPago));
-
-  switch (opcionPago) {
-    case "1":
-      tarjetaCredito = prompt(
-        "Ingresa el número de la tarjeta de credito.\nDe cancelar el turno antes de las 24hs. se reintegrará la seña"
-      );
-      return true;
-      break;
-    case "2":
-      alert(
-        nombreEnSesion() +
-          " realiza la transferencia al siguiente alias: " +
-          ALIAS +
-          "\nDe cancelar el turno antes de las 24hs. se reintegrará la seña"
-      );
-      return true;
-      break;
-    default:
-      return false;
-      break;
-  }
+  });
+  return confirmado;
 }
 
 function agregarTurnoConfirmado() {
@@ -161,6 +109,8 @@ const borrarTurnoAConsultar = function () {
   turnoAConsultar = {};
   sessionStorage.removeItem("turnoAConsultar");
 };
+
+function pronostico() {}
 
 mensajeBienvenida();
 enviarForm();

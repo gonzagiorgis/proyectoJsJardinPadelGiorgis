@@ -3,9 +3,6 @@ let telefonoInvitado = sessionStorage.getItem("telefonoInvitado");
 let usuarioEnSesion = sessionStorage.getItem("usuarioEnSesion");
 let invitadoCorrecto = sessionStorage.getItem("invitadoCorrecto");
 let inicioSesionCorrecto = sessionStorage.getItem("inicioSesionCorrecto");
-let respuestaConsulta = "";
-let tarjetaCredito = "";
-let mensaje = "";
 let turnoAConsultar = {};
 let formulario = document.getElementById("formulario");
 const ALIAS = "jardin-club";
@@ -69,14 +66,16 @@ class Turno {
   }
 
   mensajeTurnoNoDisponible() {
-    return alert(
-      this.usuario +
-        ", el turno que solicitaste no se encuentra disponible para el " +
+    return Swal.fire({
+      icon: "error",
+      title: this.usuario,
+      text:
+        "El turno que solicitaste no se encuentra disponible para el " +
         this.fecha +
         " a las " +
         this.hora +
-        "hs."
-    );
+        "hs. Prueba con otro día u horario.",
+    });
   }
 }
 class Usuario {
@@ -125,18 +124,6 @@ function usuarioExistente(nombreUsuario) {
   } else {
     return true;
   }
-}
-
-function entradaValida(entrada) {
-  do {
-    mensaje = prompt("Ingresa tu " + entrada + ":");
-    if (mensaje == "") {
-      alert("Débes ingresar tu " + entrada + ".");
-    } else if (mensaje == null) {
-      break;
-    }
-  } while (mensaje == "");
-  return mensaje;
 }
 
 const cambiarAInvitado = function () {
@@ -206,11 +193,10 @@ const cambiarAInicioUsuario = function () {
 
 function inicioDeSesion() {
   let formulario = document.getElementById("inicioSesion");
-  let usuario = formulario.nombreUsuario.value;
-  let pass = formulario.password.value;
-
   formulario.addEventListener("submit", (e) => {
     e.preventDefault();
+    let usuario = formulario.nombreUsuario.value;
+    let pass = formulario.password.value;
     if (usuarioValido(usuario, pass)) {
       inicioSesionCorrecto = true;
       usuarioEnSesion = usuario;
@@ -222,6 +208,11 @@ function inicioDeSesion() {
         icon: "warning",
       });
       inicioSesionCorrecto = false;
+      console.log(usuarioValido(usuario, pass));
+      console.log(inicioSesionCorrecto);
+      console.log(usuario);
+      console.log(pass);
+      console.log(formulario);
     }
   });
 }
@@ -339,7 +330,7 @@ const menuInicio = function () {
   mensajeBienvenida.textContent =
     "Bienvenido a Jardín Padel Club! En esta sección podrás solicitar y reservar un turno. Recuerda que si eres usuario registrado accedes a un descuento del " +
     parseInt(DESCUENTOUSUARIOREGISTRADO * 100) +
-    "%";
+    "%.";
   // let main = document.getElementById("principal");
 
   let botonInicioInvitado = document.getElementById("botonInicioInvitado");
