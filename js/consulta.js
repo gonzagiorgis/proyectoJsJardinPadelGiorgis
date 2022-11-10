@@ -1,3 +1,5 @@
+// e8e16eafb2ff598cf53b1d180a0a77fd
+
 function mensajeBienvenida() {
   let mensajeBienvenida = document.getElementById("mensajeBienvenida");
   mensajeBienvenida.innerText = `Bienvenido/a ${nombreEnSesion()}`;
@@ -110,7 +112,54 @@ const borrarTurnoAConsultar = function () {
   sessionStorage.removeItem("turnoAConsultar");
 };
 
-function pronostico() {}
+function pronostico() {
+  const key = "e8e16eafb2ff598cf53b1d180a0a77fd";
+  let url = `http://api.openweathermap.org/data/2.5/forecast?lat=-31.45&lon=-64.16&appid=e8e16eafb2ff598cf53b1d180a0a77fd&units=metric&lang=es`;
+
+  fetch(url)
+    .then((res) => {
+      return res.json();
+    })
+    .then((clima) => {
+      for (i = 0; i < 5; i += 1) {
+        let min = Number(clima.list[i].main.temp_min).toFixed(1) + "ºC";
+        let max = Number(clima.list[i].main.temp_max).toFixed(1) + "ºC";
+        let descripcion = clima.list[i].weather[0].description;
+        document.getElementById("dia" + (i + 1)).innerHTML =
+          "Min: " + min + "<br>Max: " + max;
+
+        document.getElementById("img" + (i + 1)).src =
+          "http://openweathermap.org/img/wn/" +
+          clima.list[i].weather[0].icon +
+          ".png";
+        document.getElementById("img" + (i + 1)).alt = descripcion;
+      }
+    })
+    .catch((error) => console.log(error));
+
+  const d = new Date();
+  const diasDeSemana = [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+  ];
+  function controlDia(dia) {
+    if (dia + d.getDay() > 6) {
+      return dia + d.getDay() - 7;
+    } else {
+      return dia + d.getDay();
+    }
+  }
+  for (let i = 0; i < 5; i += 1) {
+    document.getElementsByClassName("dia" + (i + 1))[0].innerHTML +=
+      diasDeSemana[controlDia(i)];
+  }
+}
 
 mensajeBienvenida();
+pronostico();
 enviarForm();
