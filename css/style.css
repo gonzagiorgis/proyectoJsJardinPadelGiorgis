@@ -62,7 +62,7 @@ body {
 }
 
 .campo__formulario--turno {
-    border: solid rgb(153, 153, 153) 1px;
+    border: hidden;
     padding: 10px;
     display: flex;
     flex-direction: column;

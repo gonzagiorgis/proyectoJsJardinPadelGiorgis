@@ -20,20 +20,13 @@
 </head>
 
 <body>
-
-
     <header class="encabezado d-flex justify-content-between">
         <img src="img/logowhite.svg" alt="" srcset="" class="px-3">
         <h1 id="titulo" class="">Consulta de Turnos</h1>
     </header>
-    <main class="">
-        <div class="mensajeBienvenida mt-2 p-2 text-lg-center">Bienvenido a Jardín Padel Club! En esta sección podrás
-            solicitar y
-            reservar
-            un
-            turno. Recuerda que si eres
-            usuario registrado accedes a un descuento del</div>
-
+    <main id="principal">
+        <div id="mensajeBienvenida" class="mensajeBienvenida mt-2 p-2 text-lg-center"></div>
+        <!--  -->
         <div class="mt-2 textoComun p-2 text-lg-center">Por favor selecciona la forma en la que quieres ingresar:</div>
         <div class="d-flex flex-column align-items-center">
             <button id="botonInicioInvitado" class="btn btn-primary mt-3 w-50">Invitado</button>
@@ -43,10 +36,12 @@
                 registrado</button>
             <button id="botonRegistroUsuario" class="btn btn-primary mt-3 w-50">Registrar
                 nuevo ususario</button>
-            <!-- <button id="botonSalir" class="btn btn-primary mt-3 w-50">Salir</button> -->
+
         </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.7/dist/sweetalert2.all.min.js"></script>
     <script src="js/main.js"></script>
+    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 </body>
 
 </html>

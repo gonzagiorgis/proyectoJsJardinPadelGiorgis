@@ -1,0 +1,23 @@
+<form id="usuarioRegistrado" action="" class="position-relative p-1">
+    <fielset class="campo__formulario--turno box__shadow mx-auto flex-column">
+        <legend class="text-center">Regístrate como nuevo usuario</legend>
+        <div class="labels__container d-flex align-items-center">
+            <label for="nombreUsuario">Ingresa tu nombre de usuario:</label>
+            <input type="text" name="nombreUsuario" id="nombreUsuario"> <label for="password2">Ingresa tu
+                teléfono</label>
+            <input type="telefono" name="telefono" id="telefono">
+        </div>
+        <div class="labels__container d-flex align-items-center">
+            <label for="password1">Ingresa tu contraseña:</label>
+            <input type="password" name="password1" id="password1">
+            <label for="password2">Ingresa nuevamente tu contraseña:</label>
+            <input type="password" name="password2" id="password2">
+
+        </div>
+    </fielset>
+    <div class="buton__container d-flex justify-content-center">
+        <input type="reset" value="Limpiar" class="m-1">
+        <input type="submit" id="submit" value="Ingresar" class="m-1">
+        <input type="button" value="Salir" class="m-1" onclick="salir()">
+    </div>
+</form>

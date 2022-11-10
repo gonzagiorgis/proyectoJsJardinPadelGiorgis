@@ -102,6 +102,22 @@ function pagoReserva() {
   let opcionPago = prompt(
     "Selecciona un medio de pago para la seña:\n1 - Tarjeta de crédito\n2 - Transferencia"
   );
+  // Swal.fire({
+  //   title: "Selecciona un medio de pago para la seña:",
+  //   showCancelButton: true,
+  //   confirmButtonText: "Tarjeta de credito",
+  //   confirmButtonText: "Transferencia",
+  //   showCancelButton: true
+  //   cancelButtonText: "Cancelar"
+  // }).then((result) => {
+  //   /* Read more about isConfirmed, isDenied below */
+  //   if (result.isConfirmed) {
+  //     Swal.fire("Saved!", "", "success");
+  //   } else if (result.isDenied) {
+  //     Swal.fire("Changes are not saved", "", "info");
+  //   }
+  // });
+
   do {
     if (opcionPago === null) {
       alert("Pago de la seña cancelado.");

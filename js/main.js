@@ -139,112 +139,148 @@ function entradaValida(entrada) {
   return mensaje;
 }
 
+const cambiarAInvitado = function () {
+  let main = document.getElementById("principal");
+  fetch("inicioinvitado.html")
+    .then((pagina) => {
+      return pagina.text();
+    })
+    .then((page) => {
+      main.innerHTML = page;
+    })
+    .then(() => {
+      invitado();
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        title: error,
+      });
+    });
+};
+
 function invitado() {
-  nombreInvitado = entradaValida("nombre");
-  telefonoInvitado = entradaValida("teléfono");
-  if (nombreInvitado != null && telefonoInvitado != null) {
-    invitadoCorrecto = true;
-    sessionStorage.setItem("invitadoCorrecto", invitadoCorrecto);
-    sessionStorage.setItem("invitadoEnSesion", nombreInvitado);
-    sessionStorage.setItem("telefonoInvitado", telefonoInvitado);
-    window.location.assign("consulta.html");
-  } else {
-    alert(
-      "Debes ingresar nombre y teléfono para poder solicitar o consultar turnos."
-    );
-  }
+  let formulario = document.getElementById("invitado");
+  formulario.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let nombre = formulario.nombreInvitado.value || false;
+    let telefono = formulario.telefonoInvitado.value || false;
+
+    if (nombre && telefono) {
+      nombreInvitado = nombre;
+      telefonoInvitado = telefono;
+      invitadoCorrecto = true;
+      sessionStorage.setItem("invitadoCorrecto", invitadoCorrecto);
+      sessionStorage.setItem("invitadoEnSesion", nombreInvitado);
+      sessionStorage.setItem("telefonoInvitado", telefonoInvitado);
+      window.location.assign("consulta.html");
+    } else {
+      Swal.fire({
+        title: "Datos incorrectos",
+        icon: "warning",
+        text: "Por favor asegúrate de haber ingresados los datos solicitados.",
+      });
+    }
+  });
 }
+
+const cambiarAInicioUsuario = function () {
+  let main = document.getElementById("principal");
+  fetch("iniciousuario.html")
+    .then((pagina) => {
+      return pagina.text();
+    })
+    .then((page) => {
+      main.innerHTML = page;
+    })
+    .then(() => {
+      inicioDeSesion();
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        title: error,
+      });
+    });
+};
 
 function inicioDeSesion() {
-  let usuarioIngresado = "";
-  let passIngresada = "";
-  for (let i = 0; i <= 3; i += 1) {
-    if (i < 3) {
-      usuarioIngresado = entradaValida("usuario");
-      passIngresada = entradaValida("contraseña");
+  let formulario = document.getElementById("inicioSesion");
+  let usuario = formulario.nombreUsuario.value;
+  let pass = formulario.password.value;
 
-      if (usuarioValido(usuarioIngresado, passIngresada)) {
-        inicioSesionCorrecto = true;
-        usuarioEnSesion = usuarioIngresado;
-        sessionStorage.setItem("usuarioEnSesion", usuarioEnSesion);
-        window.location.assign("consulta.html");
-
-        break;
-      } else {
-        alert("Usuario o contraseña incorrecto");
-        inicioSesionCorrecto = false;
-      }
+  formulario.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (usuarioValido(usuario, pass)) {
+      inicioSesionCorrecto = true;
+      usuarioEnSesion = usuario;
+      sessionStorage.setItem("usuarioEnSesion", usuarioEnSesion);
+      window.location.assign("consulta.html");
     } else {
-      alert(
-        "Vuelva a intentarlo más tarde, ha utilizado los 3 intentos permitidos."
-      );
+      Swal.fire({
+        title: "Usuario y/o contraseña incorrecto/s.",
+        icon: "warning",
+      });
       inicioSesionCorrecto = false;
-      break;
     }
-  }
-  sessionStorage.setItem("inicioSesionCorrecto", inicioSesionCorrecto);
+  });
 }
 
+const cambiarARegistroUsuario = function () {
+  let main = document.getElementById("principal");
+  fetch("registrousuario.html")
+    .then((pagina) => {
+      return pagina.text();
+    })
+    .then((page) => {
+      main.innerHTML = page;
+    })
+    .then(() => {
+      registroUsuario();
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        title: error,
+      });
+    });
+};
+
 function registroUsuario() {
-  let nombreIngresado = "";
+  let formulario = document.getElementById("usuarioRegistrado");
+
   if (JSON.parse(localStorage.getItem("usuarios"))) {
     usuariosRegistrados = JSON.parse(localStorage.getItem("usuarios"));
   }
 
-  do {
-    nombreIngresado = entradaValida("usuario");
-    if (usuarioExistente(nombreIngresado)) {
-      alert("Usuario existente, ingresa otro nombre de usuario.");
-    }
-  } while (usuarioExistente(nombreIngresado));
-
-  let telefonoIngresado = entradaValida("teléfono");
-  let password = entradaValida("contraseña");
-
-  if (
-    nombreIngresado != null &&
-    telefonoIngresado != null &&
-    password != null
-  ) {
-    for (let i = 0; i <= 3; i += 1) {
-      if (i < 3) {
-        let passCheck = prompt("Ingresa nuevamente la contraseña:");
-        if (password === passCheck) {
-          usuariosRegistrados.push(
-            new Usuario(nombreIngresado, password, telefonoIngresado)
-          );
-          localStorage.setItem("usuarios", JSON.stringify(usuariosRegistrados));
-          inicioSesionCorrecto = true;
-          usuarioEnSesion = nombreIngresado;
-          sessionStorage.setItem("usuarioEnSesion", usuarioEnSesion);
-          window.location.assign("consulta.html");
-          break;
-        } else {
-          alert("La contraseña no coincide, vuelve a ingresarla.");
-          inicioSesionCorrecto = false;
-        }
-      } else {
-        alert("Contraseña incorrecta. Imposible registrar");
-        inicioSesionCorrecto = false;
-        break;
-      }
-    }
-  } else {
-    alert("Faltan datos para proceder con el registro.");
-  }
-  sessionStorage.setItem("inicioSesionCorrecto", inicioSesionCorrecto);
-}
-
-function opcionValidaMenuInicio(opcion) {
-  if (isNaN(opcion)) {
-    return false;
-  } else {
-    if (opcion <= 0 || opcion >= 5) {
-      return false;
+  formulario.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let nombre = formulario.nombreUsuario.value;
+    let pass1 = formulario.password1.value;
+    let pass2 = formulario.password2.value;
+    let telefono = formulario.telefono.value;
+    if (usuarioExistente(nombre)) {
+      Swal.fire({
+        title: "Nombre de usuario en uso.",
+        text: "Utiliza un nombre de usuario distinto.",
+        icon: "warning",
+      });
+    } else if (pass1 === pass2) {
+      usuariosRegistrados.push(new Usuario(nombre, pass1, telefono));
+      localStorage.setItem("usuarios", JSON.stringify(usuariosRegistrados));
+      inicioSesionCorrecto = true;
+      usuarioEnSesion = nombre;
+      sessionStorage.setItem("usuarioEnSesion", usuarioEnSesion);
+      window.location.assign("consulta.html");
     } else {
-      return true;
+      Swal.fire({
+        title: "Las contraseñas no coinciden, vuelva a intentarlo.",
+        icon: "warning",
+      });
+      inicioSesionCorrecto = false;
     }
-  }
+    sessionStorage.setItem("inicioSesionCorrecto", inicioSesionCorrecto);
+  });
 }
 
 function opcionValidaPago(opcion) {
@@ -299,20 +335,35 @@ const salir = function () {
 };
 
 const menuInicio = function () {
+  let mensajeBienvenida = document.getElementById("mensajeBienvenida");
+  mensajeBienvenida.textContent =
+    "Bienvenido a Jardín Padel Club! En esta sección podrás solicitar y reservar un turno. Recuerda que si eres usuario registrado accedes a un descuento del " +
+    parseInt(DESCUENTOUSUARIOREGISTRADO * 100) +
+    "%";
+  // let main = document.getElementById("principal");
+
   let botonInicioInvitado = document.getElementById("botonInicioInvitado");
   let botonInicioUsuario = document.getElementById("botonInicioUsuario");
   let botonRegistroUsuario = document.getElementById("botonRegistroUsuario");
 
   if (botonInicioInvitado) {
-    botonInicioInvitado.addEventListener("click", invitado);
+    botonInicioInvitado.addEventListener("click", (evt) => {
+      evt.preventDefault();
+      cambiarAInvitado();
+    });
   }
 
   if (botonInicioUsuario) {
-    botonInicioUsuario.addEventListener("click", inicioDeSesion);
+    botonInicioUsuario.addEventListener("click", (evt) => {
+      evt.preventDefault();
+      cambiarAInicioUsuario();
+    });
   }
-
   if (botonRegistroUsuario) {
-    botonRegistroUsuario.addEventListener("click", registroUsuario);
+    botonRegistroUsuario.addEventListener("click", (evt) => {
+      evt.preventDefault();
+      cambiarARegistroUsuario();
+    });
   }
 };
 
