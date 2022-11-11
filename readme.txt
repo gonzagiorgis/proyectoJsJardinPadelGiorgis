@@ -9,4 +9,6 @@ de consulta de truno.
 Para ingresar como usuario registrado primero hay que registrar un usuario.
 Tanto los usuarios registrados como los turnos confirmados quedan alojados en localStorage, simulando el servidor.
 
+Para correcto funcionamiento usar el link netlify o liveserver de clonar el repo
+
 https://jardinpadeljscoder.netlify.app/
