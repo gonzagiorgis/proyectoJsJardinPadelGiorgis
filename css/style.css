@@ -114,7 +114,8 @@ header {
 #contenedorClima img {
     width: 90px;
     height: 90px;
-
+    animation: appear;
+    animation-duration: 3s;
 }
 
 .dia1,
@@ -126,4 +127,18 @@ header {
     flex-direction: column;
     align-items: center;
     text-align: center;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }

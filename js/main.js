@@ -15,8 +15,6 @@ let usuariosRegistrados = [];
 let turnosConfirmados = [];
 
 // inicio de funciones
-
-const salida = () => opcionInicio === "4";
 class Turno {
   constructor(usuario, telefono, fecha, hora, duracion) {
     this.usuario = usuario;
@@ -85,7 +83,7 @@ class Usuario {
     this.telefono = telefono;
   }
 }
-
+// valida si el nombre de usuario y la contraseña ingresada existen en los usuarios registrados guardados en localStorage, devolviendo un booleno
 function usuarioValido(nombreUsuario, pass) {
   if (JSON.parse(localStorage.getItem("usuarios"))) {
     usuariosRegistrados = JSON.parse(localStorage.getItem("usuarios"));
@@ -112,6 +110,7 @@ function convertirFloatAHora(h) {
   return hora + ":" + minutos + "hs.";
 }
 
+// comprueba si el nombre de usuario ingresado al registrar uno nuevo ya existe
 function usuarioExistente(nombreUsuario) {
   if (JSON.parse(localStorage.getItem("usuarios"))) {
     usuariosRegistrados = JSON.parse(localStorage.getItem("usuarios"));
@@ -126,6 +125,7 @@ function usuarioExistente(nombreUsuario) {
   }
 }
 
+// maneja el renderizado sin tener que recargar la pagina al clickear sobre ingreso como invitado
 const cambiarAInvitado = function () {
   let main = document.getElementById("principal");
   fetch("inicioinvitado.html")
@@ -146,6 +146,7 @@ const cambiarAInvitado = function () {
     });
 };
 
+// maneja el ingreso de los datos del formulario del invitado
 function invitado() {
   let formulario = document.getElementById("invitado");
   formulario.addEventListener("submit", (e) => {
@@ -170,7 +171,7 @@ function invitado() {
     }
   });
 }
-
+// renderiza la pagina para el ingreso del usuario registrado
 const cambiarAInicioUsuario = function () {
   let main = document.getElementById("principal");
   fetch("iniciousuario.html")
@@ -191,6 +192,7 @@ const cambiarAInicioUsuario = function () {
     });
 };
 
+// maneja el ingreso y registro de los datos del formulario de ingreso del usuario registrado
 function inicioDeSesion() {
   let formulario = document.getElementById("inicioSesion");
   formulario.addEventListener("submit", (e) => {
@@ -200,6 +202,7 @@ function inicioDeSesion() {
     if (usuarioValido(usuario, pass)) {
       inicioSesionCorrecto = true;
       usuarioEnSesion = usuario;
+      sessionStorage.setItem("inicioSesionCorrecto", inicioSesionCorrecto);
       sessionStorage.setItem("usuarioEnSesion", usuarioEnSesion);
       window.location.assign("consulta.html");
     } else {
@@ -208,15 +211,11 @@ function inicioDeSesion() {
         icon: "warning",
       });
       inicioSesionCorrecto = false;
-      console.log(usuarioValido(usuario, pass));
-      console.log(inicioSesionCorrecto);
-      console.log(usuario);
-      console.log(pass);
-      console.log(formulario);
     }
   });
 }
 
+// renderiza el formulario de registro de un nuevo usuario
 const cambiarARegistroUsuario = function () {
   let main = document.getElementById("principal");
   fetch("registrousuario.html")
@@ -237,6 +236,7 @@ const cambiarARegistroUsuario = function () {
     });
 };
 
+// maneja los datos ingresados en el formulario de registro de nuevo usuario
 function registroUsuario() {
   let formulario = document.getElementById("usuarioRegistrado");
 
@@ -262,6 +262,7 @@ function registroUsuario() {
       inicioSesionCorrecto = true;
       usuarioEnSesion = nombre;
       sessionStorage.setItem("usuarioEnSesion", usuarioEnSesion);
+      console.log(nombre);
       window.location.assign("consulta.html");
     } else {
       Swal.fire({
@@ -274,18 +275,7 @@ function registroUsuario() {
   });
 }
 
-function opcionValidaPago(opcion) {
-  if (isNaN(opcion)) {
-    return false;
-  } else {
-    if (opcion <= 0 || opcion >= 3) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-}
-
+// devuelve el nombre del usuario en la sesian actual para usado para el mensaje de bienvenida personalizado
 function nombreEnSesion() {
   let nombre = "";
   if (invitadoCorrecto) {
@@ -306,14 +296,6 @@ function telefonoEnSesion() {
   }
 }
 
-function inicioValido() {
-  if (invitadoCorrecto === true || inicioSesionCorrecto === true) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 const salir = function () {
   sessionStorage.removeItem("invitadoCorrecto");
   sessionStorage.removeItem("inicioSesionCorrecto");
@@ -325,6 +307,7 @@ const salir = function () {
   window.location.assign("index.html");
 };
 
+// maneja los eventos del menu principal
 const menuInicio = function () {
   let mensajeBienvenida = document.getElementById("mensajeBienvenida");
   mensajeBienvenida.textContent =
