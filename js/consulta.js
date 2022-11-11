@@ -118,7 +118,7 @@ const borrarTurnoAConsultar = function () {
 // maneja el renderizado del pronostico en el formulario de consulta de turno de los proximos 5 dias tomando información desde openweather
 function pronostico() {
   const key = "e8e16eafb2ff598cf53b1d180a0a77fd";
-  let url = `http://api.openweathermap.org/data/2.5/forecast?lat=-31.45&lon=-64.16&appid=e8e16eafb2ff598cf53b1d180a0a77fd&units=metric&lang=es`;
+  let url = `https://api.openweathermap.org/data/2.5/forecast?lat=-31.45&lon=-64.16&appid=e8e16eafb2ff598cf53b1d180a0a77fd&units=metric&lang=es`;
   const d = new Date();
   const diasDeSemana = [
     "Domingo",
@@ -187,7 +187,7 @@ function pronostico() {
           "ºC";
 
         document.getElementById("img" + (i + 1)).src =
-          "http://openweathermap.org/img/wn/" +
+          "https://openweathermap.org/img/wn/" +
           clima.list[i].weather[0].icon +
           ".png";
         document.getElementById("img" + (i + 1)).alt = descripcion;
