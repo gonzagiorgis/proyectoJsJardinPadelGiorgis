@@ -20,9 +20,9 @@
 </head>
 
 <body>
-    <header class="encabezado d-flex justify-content-between">
-        <img src="img/logowhite.svg" alt="" srcset="" class="px-3">
-        <h1 id="titulo" class="textoComun">Consulta de Turnos</h1>
+    <header class="encabezado d-flex justify-content-between justify-content-md-center">
+        <img src="img/logowhite.svg" alt="" srcset="" class="px-md-3 mx-lg-5">
+        <h1 id="titulo" class="textoComun my-auto mx-lg-5">Consulta de Turnos</h1>
     </header>
     <h2 id="mensajeBienvenida" class="mensajeBienvenida">Bienvenido</h2>
     <form id="formulario" action="" class="position-relative p-1">
@@ -69,35 +69,39 @@
             <input type="button" value="Salir" class="m-1" onclick="salir()">
         </div>
     </form>
-    <section id="contenedorClima">
-        <div class="dia1" style="width: 8rem;">
-            <img src="" id="img1" class="card-img-top" alt="">
-            <div class="card-body">
-                <p id="dia1" class="textoClima"></p>
+    <section id="contenedorClima" class="container">
+        <div class="row justify-content-evenly justify-content-lg-center">
+            <div class="dia1 col-1">
+                <img src="" id="img1" class="card-img-top" alt="">
+                <div class="card-body">
+                    <p id="dia1" class="textoClima"></p>
+                </div>
+            </div>
+            <div class="dia2 col-1">
+                <img src="" id="img2" class="card-img-top" alt="">
+                <div class="card-body">
+                    <p id="dia2" class="textoClima"></p>
+                </div>
+            </div>
+            <div class="dia3 col-1">
+                <img src="" id="img3" class="card-img-top" alt="">
+                <div class="card-body">
+                    <p id="dia3" class="textoClima"></p>
+                </div>
             </div>
         </div>
-        <div class="dia2" style="width: 8rem;">
-            <img src="" id="img2" class="card-img-top" alt="">
-            <div class="card-body">
-                <p id="dia2" class="textoClima"></p>
+        <div class="row justify-content-evenly justify-content-lg-center">
+            <div class="dia4 col-1">
+                <img src="" id="img4" class="card-img-top" alt="">
+                <div class="card-body">
+                    <p id="dia4" class="textoClima"></p>
+                </div>
             </div>
-        </div>
-        <div class="dia3" style="width: 8rem;">
-            <img src="" id="img3" class="card-img-top" alt="">
-            <div class="card-body">
-                <p id="dia3" class="textoClima"></p>
-            </div>
-        </div>
-        <div class="dia4" style="width: 8rem;">
-            <img src="" id="img4" class="card-img-top" alt="">
-            <div class="card-body">
-                <p id="dia4" class="textoClima"></p>
-            </div>
-        </div>
-        <div class="dia5" style="width: 8rem;">
-            <img src="" id="img5" class="card-img-top" alt="">
-            <div class="card-body">
-                <p id="dia5" class="textoClima"></p>
+            <div class="dia5 col-1">
+                <img src="" id="img5" class="card-img-top" alt="">
+                <div class="card-body">
+                    <p id="dia5" class="textoClima"></p>
+                </div>
             </div>
         </div>
     </section>
